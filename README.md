@@ -1,9 +1,8 @@
-**`AiMarkmap`** 是一个零依赖、纯前端的单文件 HTML 应用。它利用大语言模型（LLM）的强大能力，将您的文本、想法或 Markdown 内容智能地转换成结构清晰、可交互的思维导图。
-
+**`AiMarkmap`** 是一个零依赖、纯前端的单文件 HTML 应用。它利用大语言模型（LLM）的强大能力，将您的文本、想法或 Markdown 内容智能地转换成结构清晰、可交互的思维导图。尤其适合快速梳理新闻报道、分析文章结构或消化长篇内容，助您在海量信息中迅速抓住核心脉络。
+![AiMarkmap Screenshot](screenshot.png)
 > **关于本项目的一个有趣事实**：
 > 这个项目从最初的概念到最终的实现，超过 90% 的代码（包括 HTML, CSS, 和 JavaScript 逻辑）均由 AI（主要由 gemini-2.5-pro 和 claude-3-7-sonnet）编写、重构和迭代完成。
-<!-- 建议在此处放置一张项目截图 -->
-<!-- ![AiMarkmap Screenshot](./screenshot.png) -->
+
 
 ## ✨ 主要特性
 
