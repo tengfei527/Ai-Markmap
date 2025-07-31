@@ -21,7 +21,9 @@
 ## 🚀 快速开始
 *您可以直接在浏览器中打开 `AiMarkmap.html` 文件开始使用，无需安装或构建。*
 1.  **下载文件**：下载 `AiMarkmap.html` 文件。
-2.  **浏览器打开**：直接在您的现代浏览器（如 Chrome, Firefox, Edge）中打开该 HTML 文件。
+2.  **浏览器打开**：
+    *  直接在您的PC端浏览器（如 Chrome, Firefox, Edge）中打开该 HTML 文件。
+    *  移动端暂不支持。
 3.  **配置 API**：
     *   点击界面右上角的 **`⚙️ API设置`** 按钮。
     *   在 **API 地址** 输入框中，填入您的 AI 服务提供商提供的 API 地址（它会自动为您补全 `/chat/completions`）。例如：`https://api.openai.com/v1`。
