@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<title>AI思维导图生成器 - Markmap</title>
+<title>AI思维导图生成 - AiMarkmap</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23667eea'/%3E%3Cg stroke='white' stroke-width='6' stroke-linecap='round'%3E%3Cline x1='50' y1='50' x2='80' y2='25'/%3E%3Cline x1='50' y1='50' x2='25' y2='40'/%3E%3Cline x1='50' y1='50' x2='60' y2='80'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='12' fill='white'/%3E%3Ccircle cx='80' cy='25' r='8' fill='white'/%3E%3Ccircle cx='25' cy='40' r='8' fill='white'/%3E%3Ccircle cx='60' cy='80' r='8' fill='white'/%3E%3Cpath d='M50 44L52 48 L56 50 L52 52 L50 56 L48 52 L44 50 L48 48 Z' fill='%23764ba2'/%3E%3C/svg%3E">
 <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js"></script>
 <script src="https://unpkg.com/markmap-lib@0.15.3/dist/browser/index.js"></script>
@@ -20,7 +20,35 @@
     .lang-btn:hover { background: rgba(255, 255, 255, 0.4); }
     .lang-btn.active { background: white; color: #667eea; font-weight: 600; border-color: white; }
     .container { display: flex; height: calc(100vh - 68px); gap: 1rem; padding: 1rem; flex-wrap: nowrap; } 
-    .editor-panel { width: 400px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); flex-shrink: 0; height: 100%; } .panel-header { background: rgba(102, 126, 234, 0.1); padding: 0.5rem 1rem; border-bottom: 1px solid rgba(102, 126, 234, 0.2); flex-shrink: 0; } .panel-title { font-size: 1rem; font-weight: 600; color: #4c63d2; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; } .ai-config { background: rgba(255, 255, 255, 0.8); padding: 0.75rem; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; } .config-row { display: flex; gap: 0.5rem; margin-bottom: 0.4rem; align-items: center; } .config-label { font-size: 0.8rem; color: #666; min-width: 50px; flex-shrink: 0; padding-top: 0; } .config-input { flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; min-width: 120px; height: 32px; } .model-input-wrapper { flex: 1; display: flex; flex-direction: column; } .hidden { display: none !important; } #custom-model-input { margin-top: 0.4rem; } .model-container { display: flex; gap: 0.3rem; align-items: center; width: 100%; } .model-select { flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; height: 32px; background: white; cursor: pointer; } .query-models-btn { padding: 0.3rem 0.6rem; border: 1px solid #667eea; border-radius: 4px; background: linear-gradient(135deg, #e3f2fd, #f3e5f5); color: #4c63d2; cursor: pointer; font-size: 0.75rem; transition: all 0.2s; white-space: nowrap; height: 32px; display: flex; align-items: center; justify-content: center; min-width: 60px; } .query-models-btn:hover { background: linear-gradient(135deg, #bbdefb, #e1bee7); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(102, 126, 234, 0.2); } .query-models-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; } .button-row { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; } .control-btn { padding: 0.5rem 0.8rem; border: none; border-radius: 5px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; flex: 1; min-width: 70px; font-weight: 500; height: 34px; display: flex; align-items: center; justify-content: center; } .control-btn.ai-btn { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: 2px solid transparent; } .control-btn.ai-btn:hover { background: linear-gradient(45deg, #5a67d8, #6b46c1); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); } .control-btn.view-btn { background: linear-gradient(135deg, #e3f2fd, #f3e5f5); color: #4c63d2; border: 1px solid #667eea; } .control-btn.view-btn:hover { background: linear-gradient(135deg, #bbdefb, #e1bee7); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(102, 126, 234, 0.2); } .control-btn.view-btn.active { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: 1px solid #667eea; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4); } .control-btn.markdown-btn { background: linear-gradient(135deg, #e8f5e8, #f0f8ff); color: #2e7d32; border: 1px solid #4caf50; } .control-btn.markdown-btn:hover { background: linear-gradient(135deg, #c8e6c9, #e3f2fd); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(76, 175, 80, 0.2); } .control-btn.markdown-btn.active { background: linear-gradient(45deg, #4caf50, #2e7d32); color: white; border: 1px solid #4caf50; box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4); } .control-btn.clear-btn { background: linear-gradient(135deg, #ffebee, #fce4ec); color: #d32f2f; border: 1px solid #f44336; flex: 0 0 auto; min-width: 55px; } .control-btn.clear-btn:hover { background: linear-gradient(135deg, #ffcdd2, #f8bbd9); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(244, 67, 54, 0.2); } .control-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; } .input-section { flex: 1; display: flex; flex-direction: column; padding: 0.75rem; overflow: hidden; } .text-input, .content-display { width: 100%; flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; resize: none; line-height: 1.5; background: #fafafa; min-height: 200px; } .mindmap-panel { flex: 1; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); position: relative; display: flex; flex-direction: column; height: 100%; } 
+    .editor-panel { width: 400px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); flex-shrink: 0; height: 100%; } .panel-header { background: rgba(102, 126, 234, 0.1); padding: 0.5rem 1rem; border-bottom: 1px solid rgba(102, 126, 234, 0.2); flex-shrink: 0; } .panel-title { font-size: 1rem; font-weight: 600; color: #4c63d2; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; } .ai-config { background: rgba(255, 255, 255, 0.8); padding: 0.75rem; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; } .config-row { display: flex; gap: 0.5rem; margin-bottom: 0.4rem; align-items: center; } .config-label { font-size: 0.8rem; color: #666; min-width: 50px; flex-shrink: 0; padding-top: 0; } .config-input { flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; min-width: 120px; height: 32px; } .model-input-wrapper { flex: 1; display: flex; flex-direction: column; } .hidden { display: none !important; } #custom-model-input { margin-top: 0.4rem; } .model-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
+  width: 100%;
+  overflow: hidden; display: flex; gap: 0.3rem; align-items: center; width: 100%; } .model-select {
+  flex: 1 1 auto;
+  width: 240px; max-width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; height: 32px; background: white; cursor: pointer; } .query-models-btn {
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 60px;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 60px;
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; padding: 0.3rem 0.6rem; border: 1px solid #667eea; border-radius: 4px; background: linear-gradient(135deg, #e3f2fd, #f3e5f5); color: #4c63d2; cursor: pointer; font-size: 0.75rem; transition: all 0.2s; white-space: nowrap; height: 32px; display: flex; align-items: center; justify-content: center; min-width: 60px; } .query-models-btn:hover { background: linear-gradient(135deg, #bbdefb, #e1bee7); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(102, 126, 234, 0.2); } .query-models-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; } .button-row { display: flex; gap: 0.4rem; margin-bottom: 0.6rem; } .control-btn { padding: 0.5rem 0.8rem; border: none; border-radius: 5px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; flex: 1; min-width: 70px; font-weight: 500; height: 34px; display: flex; align-items: center; justify-content: center; } .control-btn.ai-btn { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: 2px solid transparent; } .control-btn.ai-btn:hover { background: linear-gradient(45deg, #5a67d8, #6b46c1); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); } .control-btn.view-btn { background: linear-gradient(135deg, #e3f2fd, #f3e5f5); color: #4c63d2; border: 1px solid #667eea; } .control-btn.view-btn:hover { background: linear-gradient(135deg, #bbdefb, #e1bee7); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(102, 126, 234, 0.2); } .control-btn.view-btn.active { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: 1px solid #667eea; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4); } .control-btn.markdown-btn { background: linear-gradient(135deg, #e8f5e8, #f0f8ff); color: #2e7d32; border: 1px solid #4caf50; } .control-btn.markdown-btn:hover { background: linear-gradient(135deg, #c8e6c9, #e3f2fd); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(76, 175, 80, 0.2); } .control-btn.markdown-btn.active { background: linear-gradient(45deg, #4caf50, #2e7d32); color: white; border: 1px solid #4caf50; box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4); } .control-btn.clear-btn { background: linear-gradient(135deg, #ffebee, #fce4ec); color: #d32f2f; border: 1px solid #f44336; flex: 0 0 auto; min-width: 55px; } .control-btn.clear-btn:hover { background: linear-gradient(135deg, #ffcdd2, #f8bbd9); transform: translateY(-1px); box-shadow: 0 3px 8px rgba(244, 67, 54, 0.2); } .control-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; } .input-section { flex: 1; display: flex; flex-direction: column; padding: 0.75rem; overflow: hidden; } .text-input, .content-display { width: 100%; flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; resize: none; line-height: 1.5; background: #fafafa; min-height: 200px; } .mindmap-panel { flex: 1; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); position: relative; display: flex; flex-direction: column; height: 100%; } 
     .mindmap-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; } .export-btn { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; min-width: 80px; font-weight: 500; } .export-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); } .export-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; } 
     .results-tabs { display: flex; gap: 0.5rem; }
     .result-tab-btn { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
@@ -354,7 +382,7 @@ const translations = {
         'js_alert_no_mindmap': '找不到思维导图，无法导出。',
         'js_alert_export_error': (type) => `导出${type}图片时发生错误，请稍后重试。`,
         
-        'defaultMarkdown': `# 🤖 AI思维导图生成器
+        'defaultMarkdown': `# 🤖 AI思维导图生成 - AiMarkmap
 
 ## ✨ 新功能特性
 ### 🎯 智能生成
@@ -402,7 +430,7 @@ const translations = {
    - 语言保持: 保持原文语言与用词
    - Emoji增强: 合理使用Emoji增强视觉导向与可读性
 
-## Rules
+3. Rules
 
 1. 基本原则：
    - 原文尊重：所有内容必须保留原文句子，杜绝改写或删减关键内容
@@ -490,7 +518,7 @@ const translations = {
         'js_alert_no_mindmap': 'Could not find the mind map to export.',
         'js_alert_export_error': (type) => `An error occurred while exporting the ${type} image. Please try again later.`,
         
-        'defaultMarkdown': `# 🤖 AI Mind Map Generator
+        'defaultMarkdown': `# 🤖 AI Mind Map Generation - AiMarkmap
 
 ## ✨ Features
 ### 🎯 Smart Generation
@@ -579,7 +607,7 @@ function setLanguage(lang) {
         btn.classList.toggle('active', btn.dataset.lang === lang);
     });
 
-    document.title = (lang === 'zh') ? 'AI思维导图生成器 - Markmap' : 'AI Mind Map Generator - Markmap';
+    document.title = (lang === 'zh') ? 'AI思维导图生成 - AiMarkmap' : 'AI Mind Map Generation - AiMarkmap';
 
     if (isShowingDefaultMarkdown) {
         currentMarkdown = T('defaultMarkdown');
@@ -629,7 +657,7 @@ const colorPalette = [
 ];
 
 function getNodeColor(node) {
-  if (node.depth === 0) return '#374151'; 
+  if (node.depth === 0) return '#374151';
   const index = (node.depth - 1) % colorPalette.length;
   return colorPalette[index];
 }
@@ -759,7 +787,7 @@ async function init() {
         const apiUrl = document.getElementById('api-url').value.trim();
         const apiKey = document.getElementById('api-key').value.trim();
         if (apiUrl && apiKey) {
-            queryAvailableModels(true); 
+            queryAvailableModels(true);
         }
 
         handleModelChange();
@@ -1315,12 +1343,12 @@ async function exportPNG() {
     exportPngBtn.textContent = T('js_exporting');
 
     try {
-        await mm.fit(); 
+        await mm.fit();
         
-        const margin = 20; 
+        const margin = 20;
         const { svgString, width, height } = getSvgContentWithStyles(mindmapSVG);
 
-        if (!svgString) { 
+        if (!svgString) {
             alert(T('js_alert_no_mindmap'));
             exportPngBtn.disabled = false;
             exportPngBtn.textContent = originalText;
@@ -1328,7 +1356,7 @@ async function exportPNG() {
         }
 
         const canvas = document.createElement('canvas');
-        const scale = 2; 
+        const scale = 2;
         canvas.width = (Number(width) + margin * 2) * scale;
         canvas.height = (Number(height) + margin * 2) * scale;
         
@@ -1377,7 +1405,7 @@ async function exportPNG() {
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'F11') {
-        e.preventDefault(); 
+        e.preventDefault();
         toggleFullScreen();
     }
 
@@ -1398,13 +1426,13 @@ document.addEventListener('keydown', (e) => {
     }
 
     if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) {
-        if (e.key === 's') { 
-            e.preventDefault(); 
-            exportPNG(); 
+        if (e.key === 's') {
+            e.preventDefault();
+            exportPNG();
         }
-        if (e.key === 'Enter') { 
+        if (e.key === 'Enter') {
             if (document.activeElement === topicInput && topicInput.value.trim()){
-                 e.preventDefault(); 
+                 e.preventDefault();
                  generateWithAI();
             }
         }
