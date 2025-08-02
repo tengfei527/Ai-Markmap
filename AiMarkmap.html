@@ -2,16 +2,19 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
 <title>AI思维导图生成器 - Markmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23667eea'/%3E%3Cg stroke='white' stroke-width='6' stroke-linecap='round'%3E%3Cline x1='50' y1='50' x2='80' y2='25'/%3E%3Cline x1='50' y1='50' x2='25' y2='40'/%3E%3Cline x1='50' y1='50' x2='60' y2='80'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='12' fill='white'/%3E%3Ccircle cx='80' cy='25' r='8' fill='white'/%3E%3Ccircle cx='25' cy='40' r='8' fill='white'/%3E%3Ccircle cx='60' cy='80' r='8' fill='white'/%3E%3Cpath d='M50 44L52 48 L56 50 L52 52 L50 56 L48 52 L44 50 L48 48 Z' fill='%23764ba2'/%3E%3C/svg%3E">
 <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js"></script>
 <script src="https://unpkg.com/markmap-lib@0.15.3/dist/browser/index.js"></script>
 <script src="https://unpkg.com/markmap-view@0.15.3/dist/browser/index.js"></script>
-<script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; } 
     .header { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 0.5rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: space-between; } 
     .header h1 { color: white; font-size: 1.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; } .ai-badge { background: linear-gradient(45deg, #ff6b6b, #ffa500); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; color: white; animation: pulse 2s infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } } 
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .github-link { display: flex; align-items: center; color: white; transition: opacity 0.2s; }
+    .github-link:hover { opacity: 0.8; }
+    .github-icon { width: 28px; height: 28px; }
     .lang-switcher { display: flex; align-items: center; gap: 0.5rem; }
     .lang-btn { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: white; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
     .lang-btn:hover { background: rgba(255, 255, 255, 0.4); }
@@ -163,9 +166,14 @@
 <body>
 <div class="header">
     <h1>AiMarkmap <span class="ai-badge">AI Powered</span></h1>
-    <div id="lang-switcher">
-        <button data-lang="zh" class="lang-btn">中文</button>
-        <button data-lang="en" class="lang-btn">EN</button>
+    <div class="header-right">
+        <a href="https://github.com/kongkongyo/Ai-Markmap" title="View on GitHub" target="_blank" rel="noopener noreferrer" class="github-link">
+            <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <div id="lang-switcher">
+            <button data-lang="zh" class="lang-btn">中文</button>
+            <button data-lang="en" class="lang-btn">EN</button>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -218,7 +226,8 @@
             <div id="results-tabs" class="results-tabs"></div>
             <div style="display: flex; align-items: center; gap: 0.5rem;">
                 <button id="fullscreen-btn" class="export-btn" onclick="toggleFullScreen()"></button>
-                <button class="export-btn" id="export-btn" onclick="exportPNG()" data-t="exportBtn" disabled></button>
+                <button id="export-svg-btn" class="export-btn" onclick="exportSVG()" data-t="exportSvgBtn" disabled></button>
+                <button id="export-png-btn" class="export-btn" onclick="exportPNG()" data-t="exportPngBtn" disabled></button>
             </div>
         </div>
         <div class="mindmap-container" id="mindmap-container">
@@ -288,12 +297,10 @@ let startTime = 0;
 let currentViewMode = 'input';
 let AI_PROMPT_TEMPLATE = '';
 
-// === Language Switching Start ===
 let currentLanguage = 'zh';
 
 const translations = {
     zh: {
-        // --- UI Elements ---
         'promptSettingsBtn': '📝 Prompt设置',
         'apiSettingsBtn': '⚙️ API设置',
         'modelLabel': '模型:',
@@ -305,7 +312,8 @@ const translations = {
         'showMarkdownBtn': '📝 显示Markdown',
         'clearBtn': '🗑️ 清空',
         'fullscreenBtn': '全屏显示(F11)',
-        'exportBtn': '导出 PNG',
+        'exportPngBtn': '导出 PNG',
+        'exportSvgBtn': '导出 SVG',
         'mindmapPreviewTitle': '🧠 思维导图预览',
         'thinkingMessage': 'AI正在思考中...',
         'apiSettingsTitle': '⚙️ API 设置',
@@ -315,7 +323,6 @@ const translations = {
         'promptSettingsTitle': '📝 Prompt 设置',
         'promptTip': '请确保在Prompt模板中包含 <code>{{CONTENT}}</code>，它将被替换为左侧的输入内容。',
         
-        // --- Placeholders & Titles ---
         'customModelInputPlaceholder': '输入自定义模型名称',
         'topicInputPlaceholder': '可直接输入或粘贴Markdown，或输入普通文本后点击“AI生成”...',
         'contentDisplayPlaceholder': '编辑内容...',
@@ -324,7 +331,6 @@ const translations = {
         'toggleVisibilityTitle': '显示/隐藏密钥',
         'promptInputPlaceholder': '在此编辑AI Prompt模板...',
 
-        // --- Dynamic JS Strings ---
         'js_generating': '生成中...',
         'js_exporting': '导出中...',
         'js_querying': '查询中...',
@@ -346,9 +352,8 @@ const translations = {
         'js_alert_query_failed': (msg) => `查询模型失败: ${msg}`,
         'js_alert_query_success': (n) => `成功获取到 ${n} 个可用模型！`,
         'js_alert_no_mindmap': '找不到思维导图，无法导出。',
-        'js_alert_export_error': '导出PNG图片时发生错误，请稍后重试。',
+        'js_alert_export_error': (type) => `导出${type}图片时发生错误，请稍后重试。`,
         
-        // --- Content ---
         'defaultMarkdown': `# 🤖 AI思维导图生成器
 
 ## ✨ 新功能特性
@@ -370,41 +375,66 @@ const translations = {
 ### 🎨 可视化展示
 - **点击选项卡切换不同版本**
 - 实时预览思维导图
-- 一键导出PNG图片`,
-        'defaultPrompt': `你是信息架构专家，擅长提取信息的结构与层次关系。请将以下内容以思维导图的Markdown格式输出："{{CONTENT}}"。
+- 一键导出SVG&PNG图片`,
+        'defaultPrompt': `{{CONTENT}}
+请按以下设定的思维导图架构师的身份对以上内容执行任务。
 
-请遵循以下要求：
+# Role: 思维导图架构师
 
-1.  内容分析：
-   - 请根据内容本身的逻辑结构，尽可能细化层级，分条展开。
+## Profile
+- description: 精通信息结构提取与层次关系分析，能够将复杂文本内容转化为清晰、分层的思维导图格式，便于阅读与理解。
+- background: 拥有丰富的信息架构设计经验，熟悉多种内容结构优化方法，擅长运用Markdown及视觉元素增强内容表现力。
+- personality: 细致严谨，逻辑清晰，注重条理性与用户体验，表达简洁明了。
+- expertise: 信息架构设计、内容层次化、结构化表达、Markdown思维导图制作。
+- target_audience: 内容编辑人员、文档撰写者、项目管理者、学习者及需要清晰信息结构的用户群体。
 
-2. 结构要求：
-   - 保持结构清晰，方便阅读和解析
-   - 层级清晰，用#、##、###等表示不同层级，依此类推。
-   - 各节点使用原文本语言。
-   - 内容中的条目请使用列表形式呈现。
-   - 中心主题字数控制在10个字左右。
-   - 层级数量最少3级，最多不限制。
-   - 若层级或分支的内容字数过多，请将内容拆分同层级列出或继续向下分层，使结构清晰简洁。
- 
+## Skills
 
-3.  内容处理：
-   - 保留原文句子。
-   - 不要添加解释或额外说明。
-   - 不要添加你自己的观点或文章之外的信息。
-   - 可适当做句式微调，以提升表达清晰度。
-   - 可适当分点列出长句或复杂内容。
+1. 信息结构设计
+   - 层级划分: 根据内容逻辑精准划分多层级结构
+   - 关系梳理: 明确主次、分支及关联节点
+   - 内容细化: 优化内容条目，细化分点展开
+   - 逻辑优化: 保持结构简洁且易读
 
-4.  增强可视性：
-   - 尽量使用 Emoji 表情增强可读性。
+2. Markdown及可视化表达
+   - 思维导图格式制作: 灵活使用#、##、###等级标题表达层次
+   - 列表运用: 以条目列表形式呈现节点内容
+   - 语言保持: 保持原文语言与用词
+   - Emoji增强: 合理使用Emoji增强视觉导向与可读性
 
-5.  输出语言：
-   - 如果原文本的主要内容为非中文，则将Markdown的所有内容按照原文本的语言输出。
+## Rules
 
-6.  输出格式：
-   - 最终输出为纯Markdown格式。
-   - 只输出 Markdown 文本本体。
-   - 不要使用代码块包裹。`
+1. 基本原则：
+   - 原文尊重：所有内容必须保留原文句子，杜绝改写或删减关键内容
+   - 结构清晰：层级分明，结构简洁，避免内容堆叠不清晰
+   - 语言一致：输出语言应与原文本主要语言保持一致
+   - 可视增强：尽量融合Emoji，增强层次感和视觉舒适度
+
+
+2. 行为准则：
+   - 不添不减：不得添加任何解释、观点或额外信息
+   - 句式优化：适度调整句式以提升表达通顺度和条理明晰
+   - 内容拆分：长句或内容过多时合理拆分并保持逻辑完整
+   - 专业严谨：坚持专业风格，避免模糊和歧义表述
+
+
+3. 限制条件：
+   - 不允许自创内容：不加入个人见解或未出现的信息
+   - 禁止格式错误：排版清晰，禁止Markdown语法错误
+   - 中心主题限制：中心主题字数限制10个字左右
+   - 层级限制：最少3级，层级数可根据内容合理扩展无上限
+
+## Workflows
+
+- 目标: 将原始文本内容转化为清晰分层的思维导图Markdown格式，便于直接阅读和内容解析
+- 步骤 1: 彻底阅读并理解原始内容，分析其内在逻辑和层级关系
+- 步骤 2: 按照层级使用#标题标记，条目采用列表形式排列，确保不少于三级层级
+- 步骤 3: 对长句进行分点拆解，调整句式增强表述清晰度，并合适插入Emoji提升视觉效果
+- 步骤 4: 最终输出为纯Markdown格式，只输出 Markdown文本本体，不要使用代码块包裹。
+- 预期结果: 输出符合规范的Markdown格式思维导图文本，层级明晰，内容完整，语言统一，无任何附加解释或内容
+
+## Initialization
+作为思维导图架构师，你必须遵守上述Rules，按照Workflows执行任务。`
     },
     en: {
         'promptSettingsBtn': '📝 Prompt Settings',
@@ -418,7 +448,8 @@ const translations = {
         'showMarkdownBtn': '📝 Show Markdown',
         'clearBtn': '🗑️ Clear',
         'fullscreenBtn': 'Fullscreen (F11)',
-        'exportBtn': 'Export PNG',
+        'exportPngBtn': 'Export PNG',
+        'exportSvgBtn': 'Export SVG',
         'mindmapPreviewTitle': '🧠 Mind Map Preview',
         'thinkingMessage': 'AI is thinking...',
         'apiSettingsTitle': '⚙️ API Settings',
@@ -457,7 +488,7 @@ const translations = {
         'js_alert_query_failed': (msg) => `Query models failed: ${msg}`,
         'js_alert_query_success': (n) => `Successfully fetched ${n} available models!`,
         'js_alert_no_mindmap': 'Could not find the mind map to export.',
-        'js_alert_export_error': 'An error occurred while exporting the PNG image. Please try again later.',
+        'js_alert_export_error': (type) => `An error occurred while exporting the ${type} image. Please try again later.`,
         
         'defaultMarkdown': `# 🤖 AI Mind Map Generator
 
@@ -574,13 +605,10 @@ function T(key, ...args) {
     }
     return translation || key;
 }
-// === Language Switching End ===
-
 const topicInput = document.getElementById('topic-input');
 const contentDisplay = document.getElementById('content-display');
 const showOriginalBtn = document.getElementById('show-original-btn');
 const showMarkdownBtn = document.getElementById('show-markdown-btn');
-const exportBtn = document.getElementById('export-btn');
 const settingsModal = document.getElementById('settings-modal');
 const versionSlider = document.getElementById('version-slider');
 const versionCountDisplay = document.getElementById('version-count-display');
@@ -652,7 +680,7 @@ function updateVersionCountDisplay() {
 function waitForLibraries() {
     return new Promise((resolve, reject) => {
         const checkInterval = setInterval(() => {
-            if (window.markmap && window.html2canvas) {
+            if (window.markmap) {
                 clearInterval(checkInterval);
                 resolve();
             }
@@ -1108,13 +1136,18 @@ function updateAllButtonStates() {
     const hasManualMd = topicInput.value.trim().startsWith('#');
     const hasGeneratedMd = aiResults.length > 0;
     const isDefaultMd = !hasManualMd && !hasGeneratedMd && currentMarkdown === T('defaultMarkdown');
-
+    
+    const exportSvgBtn = document.getElementById('export-svg-btn');
+    const exportPngBtn = document.getElementById('export-png-btn');
 
     showOriginalBtn.classList.toggle('active', currentViewMode === 'original');
     showMarkdownBtn.classList.toggle('active', currentViewMode === 'markdown');
     showOriginalBtn.disabled = !hasOriginalContent;
     showMarkdownBtn.disabled = !hasGeneratedMd && !hasManualMd;
-    exportBtn.disabled = isDefaultMd;
+
+    const canExport = !isDefaultMd;
+    if (exportSvgBtn) exportSvgBtn.disabled = !canExport;
+    if (exportPngBtn) exportPngBtn.disabled = !canExport;
 }
 
 function updateMarkmap(markdown) {
@@ -1171,35 +1204,176 @@ function handleFullScreenChange() {
     }
 }
 
-async function exportPNG() {
-    if (exportBtn.disabled) return;
+function getAllCssRules() {
+    let cssText = '';
+    for (const styleSheet of document.styleSheets) {
+        try {
+            if (styleSheet.cssRules) {
+                for (const rule of styleSheet.cssRules) {
+                    cssText += rule.cssText;
+                }
+            }
+        } catch (e) {
+            console.warn("Could not read CSS rules from stylesheet:", styleSheet.href, e);
+        }
+    }
+    return cssText;
+}
+
+function getSvgContentWithStyles(svgElement) {
+    const mainGroup = svgElement.querySelector('g');
+    if (!mainGroup) {
+        return { svgString: '', width: 0, height: 0 };
+    }
+
+    const bbox = mainGroup.getBBox();
     
-    const mindmapSVG = document.querySelector('#mindmap-container svg');
-    if (!mindmapSVG) { alert(T('js_alert_no_mindmap')); return; }
+    const newSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+    const finalWidth = bbox.width;
+    const finalHeight = bbox.height;
+    newSvg.setAttribute('width', finalWidth);
+    newSvg.setAttribute('height', finalHeight);
+
+    newSvg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
     
-    const originalText = exportBtn.innerHTML;
-    exportBtn.disabled = true;
-    exportBtn.innerHTML = T('js_exporting');
+    newSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    newSvg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+    const style = document.createElement('style');
+    style.textContent = getAllCssRules();
+    newSvg.appendChild(style);
+
+    const groupClone = mainGroup.cloneNode(true);
+    
+    groupClone.removeAttribute('transform');
+    newSvg.appendChild(groupClone);
+
+    const serializer = new XMLSerializer();
+    let svgString = serializer.serializeToString(newSvg);
+
+    svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink=');
+    svgString = svgString.replace(/NS\d+:href/g, 'xlink:href');
+
+    return { svgString, width: finalWidth, height: finalHeight };
+}
+
+function downloadFile(content, fileName, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    
+    document.body.appendChild(link);
+    link.click();
+    
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+async function exportSVG() {
+    const exportSvgBtn = document.getElementById('export-svg-btn');
+    if (exportSvgBtn.disabled) return;
+
+    const mindmapSVG = document.querySelector('#mindmap');
+    if (!mindmapSVG || mindmapSVG.children.length === 0) {
+        alert(T('js_alert_no_mindmap'));
+        return;
+    }
+    
+    const originalText = exportSvgBtn.textContent;
+    exportSvgBtn.disabled = true;
+    exportSvgBtn.textContent = T('js_exporting');
 
     try {
         await mm.fit();
-        const canvas = await html2canvas(mindmapSVG.parentElement, {
-            backgroundColor: '#ffffff', logging: false, useCORS: true, scale: 2
-        });
-        const link = document.createElement('a');
-        link.download = `ai-mindmap-${Date.now()}.png`;
-        link.href = canvas.toDataURL('image/png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const { svgString } = getSvgContentWithStyles(mindmapSVG);
+        downloadFile(svgString, `aimarkmap-${Date.now()}.svg`, 'image/svg+xml');
     } catch (error) {
-        console.error('导出PNG失败:', error);
-        alert(T('js_alert_export_error'));
+        console.error('导出SVG失败:', error);
+        alert(T('js_alert_export_error', 'SVG'));
     } finally {
-        exportBtn.disabled = false;
-        exportBtn.innerHTML = originalText;
+        exportSvgBtn.disabled = false;
+        exportSvgBtn.textContent = originalText;
     }
 }
+
+async function exportPNG() {
+    const exportPngBtn = document.getElementById('export-png-btn');
+    if (exportPngBtn.disabled) return;
+
+    const mindmapSVG = document.querySelector('#mindmap');
+    if (!mindmapSVG || mindmapSVG.children.length === 0) {
+        alert(T('js_alert_no_mindmap'));
+        return;
+    }
+    
+    const originalText = exportPngBtn.textContent;
+    exportPngBtn.disabled = true;
+    exportPngBtn.textContent = T('js_exporting');
+
+    try {
+        await mm.fit(); 
+        
+        const margin = 20; 
+        const { svgString, width, height } = getSvgContentWithStyles(mindmapSVG);
+
+        if (!svgString) { 
+            alert(T('js_alert_no_mindmap'));
+            exportPngBtn.disabled = false;
+            exportPngBtn.textContent = originalText;
+            return;
+        }
+
+        const canvas = document.createElement('canvas');
+        const scale = 2; 
+        canvas.width = (Number(width) + margin * 2) * scale;
+        canvas.height = (Number(height) + margin * 2) * scale;
+        
+        const ctx = canvas.getContext('2d');
+        ctx.scale(scale, scale);
+        
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const img = new Image();
+        
+        const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+
+        img.onload = function() {
+            ctx.drawImage(img, margin, margin);
+
+            const pngUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `aimarkmap-${Date.now()}.png`;
+            link.href = pngUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            exportPngBtn.disabled = false;
+            exportPngBtn.textContent = originalText;
+        };
+
+        img.onerror = function(err) {
+            console.error("加载SVG Data URL到Image对象失败:", err);
+            alert(T('js_alert_export_error', 'PNG'));
+            exportPngBtn.disabled = false;
+            exportPngBtn.textContent = originalText;
+        };
+
+        img.src = dataUrl;
+
+    } catch (error) {
+        console.error('导出PNG时发生意外错误:', error);
+        alert(T('js_alert_export_error', 'PNG'));
+        exportPngBtn.disabled = false;
+        exportPngBtn.textContent = originalText;
+    }
+}
+
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'F11') {
