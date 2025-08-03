@@ -189,6 +189,36 @@
         color: #333;
     }
     .mindmap-header .panel-title { color: white; }
+    #edit-node-input {
+        height: 120px;
+        margin-bottom: 1rem;
+    }
+    .context-menu {
+        position: absolute;
+        z-index: 3000;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 6px 0;
+        min-width: 150px;
+        font-size: 0.9rem;
+        list-style: none;
+        user-select: none;
+    }
+
+    .context-menu-item {
+        padding: 8px 16px;
+        cursor: pointer;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .context-menu-item:hover {
+        background-color: #f5f5f5;
+    }
 </style>
 </head>
 <body>
@@ -313,6 +343,22 @@
     </div>
 </div>
 
+<div id="edit-node-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+        <div class="panel-header">
+            <div class="panel-title" data-t="editNodeTitle"></div>
+        </div>
+        <div class="ai-config">
+            <textarea id="edit-node-input" class="text-input" data-t-placeholder="editNodePlaceholder"></textarea>
+            <div class="button-row">
+                <button class="control-btn ai-btn" onclick="saveNodeEdit()" data-t="saveAndCloseBtn"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
 let mm = null;
 let transformer = null;
@@ -324,6 +370,7 @@ let timerInterval = null;
 let startTime = 0;
 let currentViewMode = 'input';
 let AI_PROMPT_TEMPLATE = '';
+let editingNodeContext = null;
 
 let currentLanguage = 'zh';
 
@@ -350,6 +397,8 @@ const translations = {
         'saveAndCloseBtn': '💾 保存并关闭',
         'promptSettingsTitle': '📝 Prompt 设置',
         'promptTip': '请确保在Prompt模板中包含 <code>{{CONTENT}}</code>，它将被替换为左侧的输入内容。',
+        'editNodeTitle': '✏️ 编辑节点',
+        'deleteNodeBtn': '🗑️ 删除节点',
         
         'customModelInputPlaceholder': '输入自定义模型名称',
         'topicInputPlaceholder': '可直接输入或粘贴Markdown，或输入普通文本后点击“AI生成”...',
@@ -358,6 +407,7 @@ const translations = {
         'apiKeyPlaceholder': 'API密钥',
         'toggleVisibilityTitle': '显示/隐藏密钥',
         'promptInputPlaceholder': '在此编辑AI Prompt模板...',
+        'editNodePlaceholder': '输入节点的新内容...',
 
         'js_generating': '生成中...',
         'js_exporting': '导出中...',
@@ -486,7 +536,9 @@ const translations = {
         'saveAndCloseBtn': '💾 Save & Close',
         'promptSettingsTitle': '📝 Prompt Settings',
         'promptTip': 'Please make sure to include <code>{{CONTENT}}</code> in the prompt template, which will be replaced with the input content from the left.',
-        
+        'editNodeTitle': '✏️ Edit Node',
+        'deleteNodeBtn': '🗑️ Delete Node',
+
         'customModelInputPlaceholder': 'Enter custom model name',
         'topicInputPlaceholder': 'Enter or paste Markdown directly, or input text and click "AI Generate"...',
         'contentDisplayPlaceholder': 'Edit content...',
@@ -494,6 +546,7 @@ const translations = {
         'apiKeyPlaceholder': 'API Key',
         'toggleVisibilityTitle': 'Show/Hide Key',
         'promptInputPlaceholder': 'Edit AI Prompt template here...',
+        'editNodePlaceholder': 'Enter the new content for the node...',
 
         'js_generating': 'Generating...',
         'js_exporting': 'Exporting...',
@@ -638,6 +691,7 @@ const contentDisplay = document.getElementById('content-display');
 const showOriginalBtn = document.getElementById('show-original-btn');
 const showMarkdownBtn = document.getElementById('show-markdown-btn');
 const settingsModal = document.getElementById('settings-modal');
+const editNodeModal = document.getElementById('edit-node-modal');
 const versionSlider = document.getElementById('version-slider');
 const versionCountDisplay = document.getElementById('version-count-display');
 const generateBtn = document.getElementById('generate-btn');
@@ -730,6 +784,8 @@ async function init() {
             duration: 500, nodeMinHeight: 16, spacingVertical: 5, spacingHorizontal: 80, autoFit: true, fitRatio: 0.95, color: getNodeColor,
         });
         
+        setupNodeInteraction();
+
         document.getElementById('lang-switcher').addEventListener('click', (e) => {
             if (e.target.matches('.lang-btn')) {
                 const lang = e.target.dataset.lang;
@@ -763,6 +819,10 @@ async function init() {
         document.querySelector('#prompt-modal .modal-close-btn').addEventListener('click', closePromptModal);
         promptModal.addEventListener('click', (e) => {
             if (e.target === promptModal) { closePromptModal(); }
+        });
+
+        editNodeModal.addEventListener('click', (e) => {
+            if (e.target === editNodeModal) { closeEditModal(); }
         });
 
         versionSlider.addEventListener('input', () => {
@@ -1402,8 +1462,211 @@ async function exportPNG() {
     }
 }
 
+function openEditModal(originalText, lineIndex, prefix) {
+    editingNodeContext = { lineIndex, prefix };
+    const editInput = document.getElementById('edit-node-input');
+    editInput.value = originalText;
+    editNodeModal.classList.remove('hidden');
+    editInput.focus();
+    editInput.select();
+}
+
+function closeEditModal() {
+    editingNodeContext = null;
+    editNodeModal.classList.add('hidden');
+}
+
+function saveNodeEdit() {
+    if (!editingNodeContext) return;
+
+    const newText = document.getElementById('edit-node-input').value;
+    const { lineIndex, prefix } = editingNodeContext;
+    const newLine = prefix + newText;
+    
+    const lines = currentMarkdown.split('\n');
+    if (lines[lineIndex] !== undefined) {
+        lines[lineIndex] = newLine;
+        currentMarkdown = lines.join('\n');
+    }
+
+    if (activeResultIndex > -1 && aiResults[activeResultIndex]) {
+        aiResults[activeResultIndex].markdown = currentMarkdown;
+        try {
+            const { root } = transformer.transform(currentMarkdown);
+            aiResults[activeResultIndex].root = root;
+        } catch (error) {
+            console.error('Error parsing edited markdown after node edit:', error);
+        }
+    }
+    
+    if (currentViewMode === 'markdown') {
+        contentDisplay.value = currentMarkdown;
+    }
+
+    updateMarkmap(currentMarkdown);
+    closeEditModal();
+}
+
+function collectNodeLines(node, linesSet) {
+    const markmapNode = node.data; 
+    if (markmapNode?.payload?.lines) {
+        const [start, end] = markmapNode.payload.lines;
+        for (let i = start; i < end; i++) {
+            linesSet.add(i);
+        }
+    }
+    if (node.children) {
+        for (const child of node.children) {
+            collectNodeLines(child, linesSet);
+        }
+    }
+}
+
+function deleteNode(nodeToDelete) {
+    if (!nodeToDelete) return;
+
+    const linesToDelete = new Set();
+    collectNodeLines(nodeToDelete, linesToDelete);
+
+    if (linesToDelete.size === 0) {
+        console.warn("Could not find line numbers for node deletion.", nodeToDelete);
+        return;
+    }
+    
+    const lines = currentMarkdown.split('\n');
+    const newLines = lines.filter((_, i) => !linesToDelete.has(i));
+    currentMarkdown = newLines.join('\n');
+
+    if (activeResultIndex > -1 && aiResults[activeResultIndex]) {
+        aiResults[activeResultIndex].markdown = currentMarkdown;
+        try {
+            const { root } = transformer.transform(currentMarkdown);
+            aiResults[activeResultIndex].root = root;
+        } catch (error) {
+            console.error('Error parsing markdown after node deletion:', error);
+        }
+    }
+    
+    if (currentViewMode === 'markdown') {
+        contentDisplay.value = currentMarkdown;
+    }
+
+    updateMarkmap(currentMarkdown);
+}
+
+
+function removeContextMenu() {
+    const existingMenu = document.getElementById('node-context-menu');
+    if (existingMenu) {
+        existingMenu.remove();
+    }
+}
+
+function createContextMenu(event, nodeData) {
+    const { pageX, pageY } = event;
+
+    const lines = currentMarkdown.split('\n');
+    const lineIndex = nodeData.data?.payload?.lines?.[0];
+    if (lineIndex === undefined || lines[lineIndex] === undefined) {
+        console.error("Invalid node data for context menu:", nodeData);
+        return;
+    }
+    const fullLine = lines[lineIndex];
+
+    const menu = document.createElement('div');
+    menu.id = 'node-context-menu';
+    menu.className = 'context-menu';
+    menu.addEventListener('contextmenu', e => e.preventDefault());
+
+    const editItem = document.createElement('div');
+    editItem.className = 'context-menu-item';
+    editItem.innerHTML = T('editNodeTitle');
+    editItem.onclick = (e) => {
+        e.stopPropagation();
+        removeContextMenu();
+        
+        const match = fullLine.match(/^(\s*(?:#+\s*|-\s*|\d+\.\s*))/);
+        const prefix = match ? match[0] : '';
+        const originalText = nodeData.data.content;
+
+        openEditModal(originalText, lineIndex, prefix);
+    };
+    menu.appendChild(editItem);
+
+    const deleteItem = document.createElement('div');
+    deleteItem.className = 'context-menu-item';
+    deleteItem.innerHTML = T('deleteNodeBtn');
+    deleteItem.onclick = (e) => {
+        e.stopPropagation();
+        deleteNode(nodeData);
+        removeContextMenu();
+    };
+    menu.appendChild(deleteItem);
+
+    document.body.appendChild(menu);
+
+    const menuWidth = menu.offsetWidth;
+    const menuHeight = menu.offsetHeight;
+    const { innerWidth, innerHeight } = window;
+    
+    let left = pageX;
+    let top = pageY;
+
+    if (pageX + menuWidth > innerWidth) {
+        left = innerWidth - menuWidth - 5;
+    }
+    if (pageY + menuHeight > innerHeight) {
+        top = innerHeight - menuHeight - 5;
+    }
+
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
+}
+
+function setupNodeInteraction() {
+    if (!mm || !d3) return;
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.context-menu')) {
+            removeContextMenu();
+        }
+    });
+
+    mm.svg.on('contextmenu.editor', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        removeContextMenu();
+        
+        const node = event.target.closest('.markmap-node');
+        if (!node) return;
+
+        const d = d3.select(node).datum();
+        if (!d?.data?.payload?.lines) return;
+        
+        createContextMenu(event, d);
+    });
+}
+
 
 document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (!editNodeModal.classList.contains('hidden')) {
+             e.preventDefault();
+             closeEditModal();
+        } else {
+             removeContextMenu();
+        }
+        return;
+    }
+
+    if (!editNodeModal.classList.contains('hidden')) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+             e.preventDefault();
+             saveNodeEdit();
+        }
+        return;
+    }
+
     if (e.key === 'F11') {
         e.preventDefault();
         toggleFullScreen();
