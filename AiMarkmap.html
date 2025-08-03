@@ -219,14 +219,67 @@
     .context-menu-item:hover {
         background-color: #f5f5f5;
     }
+    .info-modal-content {
+        line-height: 1.6;
+        color: #333;
+        padding: 1rem 1.5rem;
+    }
+    .info-modal-content h2 {
+        font-size: 1.5rem;
+        color: #4c63d2;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #eee;
+    }
+    .info-modal-content h2:first-of-type {
+        margin-top: 0;
+    }
+    .info-modal-content h3 {
+        font-size: 1.2rem;
+        color: #667eea;
+        margin-top: 1.2rem;
+        margin-bottom: 0.8rem;
+    }
+    .info-modal-content p, .info-modal-content ul {
+        margin-bottom: 1rem;
+    }
+    .info-modal-content ul {
+        list-style-position: outside;
+        padding-left: 1.5rem;
+    }
+    .info-modal-content li {
+        margin-bottom: 0.5rem;
+    }
+    .info-modal-content li > ul {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .info-modal-content strong {
+        color: #5a67d8;
+    }
+    .info-modal-content code {
+        background-color: rgba(102, 126, 234, 0.1);
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-family: monospace;
+        color: #4c63d2;
+        font-weight: 600;
+    }
 </style>
 </head>
 <body>
 <div class="header">
     <h1>AiMarkmap <span class="ai-badge">AI Powered</span></h1>
     <div class="header-right">
+        <button id="info-btn" class="github-link" style="background:none; border:none; cursor:pointer; padding:0; color:white;" data-t-title="helpBtnTitle">
+            <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
+            </svg>
+        </button>
         <a href="https://github.com/kongkongyo/Ai-Markmap" title="View on GitHub" target="_blank" rel="noopener noreferrer" class="github-link">
-            <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></svg>
         </a>
         <div id="lang-switcher">
             <button data-lang="zh" class="lang-btn">中文</button>
@@ -358,6 +411,18 @@
     </div>
 </div>
 
+<div id="info-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="width: 800px; max-height: 80vh; display: flex; flex-direction: column;">
+        <button class="modal-close-btn" onclick="closeInfoModal()">&times;</button>
+        <div class="panel-header">
+            <div class="panel-title" data-t="infoModalTitle"></div>
+        </div>
+        <div class="info-modal-content" style="overflow-y: auto; flex-grow: 1;">
+            <!-- Content is now populated by JavaScript -->
+        </div>
+    </div>
+</div>
+
 
 <script>
 let mm = null;
@@ -399,6 +464,57 @@ const translations = {
         'promptTip': '请确保在Prompt模板中包含 <code>{{CONTENT}}</code>，它将被替换为左侧的输入内容。',
         'editNodeTitle': '✏️ 编辑节点',
         'deleteNodeBtn': '🗑️ 删除节点',
+        'helpBtnTitle': '帮助与信息',
+        'infoModalTitle': '使用说明、服务条款和隐私政策',
+        'infoModalContentHtml': `
+            <h2>使用说明</h2>
+            <ul>
+                <li><strong>API 设置:</strong> 首次使用，请点击右上角的 <code>⚙️ API设置</code> 按钮，填入您的 AI 服务商提供的 API 地址 (URL) 和密钥 (Key)。配置将自动保存在您的浏览器本地。</li>
+                <li><strong>模型选择:</strong> 在左侧面板选择或输入您想使用的 AI 模型。点击 <code>🔍 查询</code> 可自动获取该 API 地址下支持的模型列表。</li>
+                <li><strong>内容输入:</strong> 在左侧最大的输入框中，您可以输入一段描述性文本，或者直接粘贴已经格式化好的 Markdown 内容。</li>
+                <li><strong>AI 生成:</strong> 输入描述性文本后，通过滑块选择希望 AI 生成的不同版本数量（1-5个），然后点击 <code>🚀 AI生成</code>。</li>
+                <li><strong>版本切换:</strong> 生成成功后，思维导图预览区上方会出现版本选项卡 (如“版本1”, “版本2”)，点击即可切换查看不同版本。</li>
+                <li><strong>编辑与查看:</strong>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>在思维导图上对任意节点<strong>单击右键</strong>，可选择<strong>“编辑节点”</strong>或<strong>“删除节点”</strong>。</li>
+                        <li>左侧的 <code>📝 显示Markdown</code> 按钮可以让你查看和编辑 AI 生成的 Markdown 源码。</li>
+                    </ul>
+                </li>
+                <li><strong>导出与全屏:</strong> 使用预览区右上角的按钮可将当前思维导图导出为 <code>SVG</code> 或 <code>PNG</code> 图片，或进入全屏模式。</li>
+            </ul>
+
+            <h2>服务条款</h2>
+            <p>当您使用 AiMarkmap 时，即表示您同意以下条款：</p>
+            <ul>
+                <li>您对自己输入到本产品中的所有内容（包括文本、API密钥等）负全部责任。您必须保证输入的内容不侵犯任何第三方权利，且不违反任何适用法律法规。</li>
+                <li>禁止利用本产品进行任何形式的恶意行为，包括但不限于大量的、不合理的 API 请求、传播非法信息、或攻击第三方服务。</li>
+            </ul>
+
+            <h2>隐私政策</h2>
+            <p>我们高度重视您的隐私。请仔细阅读以下关于我们如何处理您的数据的信息：</p>
+            <h3>数据收集</h3>
+            <p>本产品主要处理两类数据：</p>
+            <ul>
+                <li><strong>配置信息:</strong> 您输入的 API 地址、API 密钥、所选模型等配置。这些信息仅使用浏览器的 <code>localStorage</code> 技术存储在<strong>您自己的电脑上</strong>，用于简化您的后续使用，不会上传到 AiMarkmap 的服务器。</li>
+                <li><strong>输入内容:</strong> 您为生成思维导图而输入的文本内容。</li>
+            </ul>
+            <p>本产品<strong>不使用</strong>任何第三方分析工具（如 Google Analytics）来追踪您的个人行为。</p>
+            
+            <h3>数据使用</h3>
+            <p>您的所有数据处理均在<strong>浏览器端（客户端）</strong>完成。具体流程如下：</p>
+            <ul>
+                <li>您的 API 密钥和输入内容仅在您点击“AI生成”按钮时，由您的浏览器直接组合成一个请求，发送给您在设置中指定的第三方 AI 服务（如 OpenAI、Google AI 等）。</li>
+                <li><strong>AiMarkmap 的服务器不存储、不中转、也无法看到</strong>您的 API 密钥和输入内容。数据传输路径为：您的浏览器 -> 您指定的 AI 服务提供商。</li>
+            </ul>
+
+            <h3>第三方服务</h3>
+            <p>本产品作为一个客户端工具，会根据您的配置调用第三方 AI 服务。您发送的数据将受您所使用的 AI 服务提供商的隐私政策和数据使用条款约束。我们强烈建议您在使用前查阅相应服务商的官方隐私政策。</p>
+
+            <h2>免责声明</h2>
+            <ul>
+                <li><strong>AI 生成内容的准确性：</strong>由 AI 模型生成的所有内容仅供参考。我们不保证其准确性、完整性或适用性。您需要自行判断并对使用这些结果所造成的一切后果负责。</li>
+                <li><strong>服务可用性：</strong>由于本产品依赖于网络连接和第三方 API 服务的稳定性，我们不承诺服务 100% 不间断或无错误。因网络问题、API 服务商故障或您自身配置错误导致的服务不可用，我们不承担任何责任。</li>
+            </ul>`,
         
         'customModelInputPlaceholder': '输入自定义模型名称',
         'topicInputPlaceholder': '可直接输入或粘贴Markdown，或输入普通文本后点击“AI生成”...',
@@ -538,6 +654,57 @@ const translations = {
         'promptTip': 'Please make sure to include <code>{{CONTENT}}</code> in the prompt template, which will be replaced with the input content from the left.',
         'editNodeTitle': '✏️ Edit Node',
         'deleteNodeBtn': '🗑️ Delete Node',
+        'helpBtnTitle': 'Help & Information',
+        'infoModalTitle': 'Instructions, Terms & Privacy Policy',
+        'infoModalContentHtml': `
+            <h2>Instructions</h2>
+            <ul>
+                <li><strong>API Settings:</strong> On first use, click the <code>⚙️ API Settings</code> button in the top right to enter the API URL and Key provided by your AI service provider. The configuration will be saved locally in your browser.</li>
+                <li><strong>Model Selection:</strong> In the left panel, select or enter the AI model you want to use. Click <code>🔍 Query</code> to automatically fetch a list of supported models from the API URL.</li>
+                <li><strong>Content Input:</strong> In the largest input box on the left, you can enter descriptive text or paste pre-formatted Markdown content.</li>
+                <li><strong>AI Generation:</strong> After entering descriptive text, use the slider to select the number of different versions you want the AI to generate (1-5), then click <code>🚀 AI Generate</code>.</li>
+                <li><strong>Switching Versions:</strong> After successful generation, version tabs (e.g., "Version 1", "Version 2") will appear above the mind map preview area. Click to view different versions.</li>
+                <li><strong>Editing and Viewing:</strong>
+                    <ul style="margin-top: 0.5rem;">
+                        <li>On the mind map, <strong>right-click</strong> any node to select <strong>"Edit Node"</strong> or <strong>"Delete Node"</strong>.</li>
+                        <li>The <code>📝 Show Markdown</code> button on the left allows you to view and edit the AI-generated Markdown source.</li>
+                    </ul>
+                </li>
+                <li><strong>Export & Fullscreen:</strong> Use the buttons in the top right of the preview area to export the current mind map as an <code>SVG</code> or <code>PNG</code> image, or enter fullscreen mode.</li>
+            </ul>
+
+            <h2>Terms of Service</h2>
+            <p>By using AiMarkmap, you agree to the following terms:</p>
+            <ul>
+                <li>You are solely responsible for all content (including text, API keys, etc.) you input into this product. You must ensure that the input content does not infringe on any third-party rights and does not violate any applicable laws and regulations.</li>
+                <li>You are prohibited from using this product for any form of malicious activity, including but not limited to, making a large number of unreasonable API requests, disseminating illegal information, or attacking third-party services.</li>
+            </ul>
+
+            <h2>Privacy Policy</h2>
+            <p>We take your privacy very seriously. Please read the following information carefully about how we handle your data:</p>
+            <h3>Data Collection</h3>
+            <p>This product primarily handles two types of data:</p>
+            <ul>
+                <li><strong>Configuration Information:</strong> The API URL, API Key, selected model, and other settings you enter. This information is stored <strong>only on your own computer</strong> using the browser's <code>localStorage</code> technology to simplify your subsequent use and is not uploaded to AiMarkmap's servers.</li>
+                <li><strong>Input Content:</strong> The text content you provide to generate mind maps.</li>
+            </ul>
+            <p>This product <strong>does not use</strong> any third-party analytics tools (like Google Analytics) to track your personal behavior.</p>
+
+            <h3>Data Usage</h3>
+            <p>All of your data processing is done on the <strong>client-side (in your browser)</strong>. The process is as follows:</p>
+            <ul>
+                <li>Your API key and input content are combined into a request by your browser and sent directly to the third-party AI service you specify in the settings (such as OpenAI, Google AI, etc.) only when you click the "AI Generate" button.</li>
+                <li><strong>AiMarkmap's servers do not store, proxy, or have any visibility into</strong> your API key and input content. The data transmission path is: Your Browser -> Your Specified AI Service Provider.</li>
+            </ul>
+
+            <h3>Third-Party Services</h3>
+            <p>As a client-side tool, this product calls third-party AI services based on your configuration. The data you send is subject to the privacy policy and data usage terms of the AI service provider you use. We strongly recommend that you review the official privacy policies of the respective service providers before use.</p>
+
+            <h2>Disclaimer</h2>
+            <ul>
+                <li><strong>Accuracy of AI-Generated Content:</strong> All content generated by AI models is for reference only. We do not guarantee its accuracy, completeness, or suitability. You need to judge for yourself and are responsible for all consequences arising from the use of these results.</li>
+                <li><strong>Service Availability:</strong> As this product relies on network connectivity and the stability of third-party API services, we do not promise that the service will be 100% uninterrupted or error-free. We do not assume any responsibility for service unavailability caused by network issues, API provider failures, or your own configuration errors.</li>
+            </ul>`,
 
         'customModelInputPlaceholder': 'Enter custom model name',
         'topicInputPlaceholder': 'Enter or paste Markdown directly, or input text and click "AI Generate"...',
@@ -655,6 +822,11 @@ function setLanguage(lang) {
         const key = el.dataset.tTitle;
         if (t[key]) el.title = t[key];
     });
+    
+    const infoModalContent = document.querySelector('#info-modal .info-modal-content');
+    if (infoModalContent && t['infoModalContentHtml']) {
+        infoModalContent.innerHTML = t['infoModalContentHtml'];
+    }
 
     document.querySelectorAll('#lang-switcher .lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -691,6 +863,7 @@ const contentDisplay = document.getElementById('content-display');
 const showOriginalBtn = document.getElementById('show-original-btn');
 const showMarkdownBtn = document.getElementById('show-markdown-btn');
 const settingsModal = document.getElementById('settings-modal');
+const infoModal = document.getElementById('info-modal');
 const editNodeModal = document.getElementById('edit-node-modal');
 const versionSlider = document.getElementById('version-slider');
 const versionCountDisplay = document.getElementById('version-count-display');
@@ -726,6 +899,9 @@ function saveAndCloseSettings() {
     const apiKey = document.getElementById('api-key').value.trim();
     if (apiUrl && apiKey) { queryAvailableModels(true); }
 }
+
+function openInfoModal() { infoModal.classList.remove('hidden'); }
+function closeInfoModal() { infoModal.classList.add('hidden'); }
 
 function openPromptModal() {
     promptInput.value = AI_PROMPT_TEMPLATE;
@@ -813,6 +989,12 @@ async function init() {
         document.querySelector('#settings-modal .modal-close-btn').addEventListener('click', closeSettingsModal);
         settingsModal.addEventListener('click', (e) => {
             if (e.target === settingsModal) { closeSettingsModal(); }
+        });
+
+        document.getElementById('info-btn').addEventListener('click', openInfoModal);
+        document.querySelector('#info-modal .modal-close-btn').addEventListener('click', closeInfoModal);
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) { closeInfoModal(); }
         });
         
         document.getElementById('prompt-settings-btn').addEventListener('click', openPromptModal);
