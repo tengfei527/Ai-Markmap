@@ -2,7 +2,7 @@
 
 ![AiMarkmap Screenshot](screenshot.png)
 > **关于本项目的一个有趣事实**：
-> 这个项目从最初的概念到最终的实现，超过 90% 的代码（包括 HTML, CSS, 和 JavaScript 逻辑）均由 AI（主要由 `gpt-4o-mini`, `gemini-1.5-pro` 和 `claude-3-sonnet`）编写、重构和迭代完成。
+> 这个项目从最初的概念到最终的实现，超过 90% 的代码（包括 HTML, CSS, 和 JavaScript 逻辑）均由 AI（主要由 `gpt-4o-mini`, `gemini-2.5-pro` 和 `claude-3-7-sonnet`）编写、重构和迭代完成。
 
 ## ✨ 主要特性
 
@@ -23,8 +23,8 @@
 *   **🔒 隐私安全**：所有配置（包括 API 密钥）均保存在您本地浏览器的 `localStorage` 中，不会上传至任何服务器。
 
 ## 🚀 快速开始
-*您可以直接在浏览器中打开 `AiMarkmap.html` 文件开始使用，无需安装或构建。*
-1.  **下载文件**：下载 `AiMarkmap.html` 文件。
+*您可以直接在浏览器中打开 `index.html` 文件开始使用，无需安装或构建。*
+1.  **下载文件**：下载 `index.html` 文件。
 2.  **浏览器打开**：
     *  直接在您的PC端浏览器（如 Chrome, Firefox, Edge）中打开该 HTML 文件。
     *  移动端暂不支持。
