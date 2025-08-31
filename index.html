@@ -418,11 +418,10 @@
             <div class="panel-title" data-t="infoModalTitle"></div>
         </div>
         <div class="info-modal-content" style="overflow-y: auto; flex-grow: 1;">
-            <!-- Content is now populated by JavaScript -->
+            
         </div>
     </div>
 </div>
-
 
 <script>
 let mm = null;
@@ -1474,64 +1473,59 @@ function handleFullScreenChange() {
     }
 }
 
-function getAllCssRules() {
+function getMindmapCssRules() {
     let cssText = '';
+    const relevantSelectors = ['.markmap', 'text', 'path', 'line', 'circle', 'foreignObject'];
     for (const styleSheet of document.styleSheets) {
         try {
             if (styleSheet.cssRules) {
                 for (const rule of styleSheet.cssRules) {
-                    cssText += rule.cssText;
+                    if (relevantSelectors.some(selector => rule.selectorText?.includes(selector))) {
+                        cssText += rule.cssText;
+                    }
                 }
             }
         } catch (e) {
-            console.warn("Could not read CSS rules from stylesheet:", styleSheet.href, e);
+            console.warn("无法读取样式表中的CSS规则:", styleSheet.href, e);
         }
     }
     return cssText;
 }
 
-function getSvgContentWithStyles(svgElement) {
+function createExportableSvg(svgElement) {
     const mainGroup = svgElement.querySelector('g');
-    if (!mainGroup) {
-        return { svgString: '', width: 0, height: 0 };
-    }
+    if (!mainGroup) return null;
 
     const bbox = mainGroup.getBBox();
+    if (bbox.width === 0 || bbox.height === 0) return null;
     
-    const newSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-    const finalWidth = bbox.width;
-    const finalHeight = bbox.height;
-    newSvg.setAttribute('width', finalWidth);
-    newSvg.setAttribute('height', finalHeight);
-
-    newSvg.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+    const svgClone = svgElement.cloneNode(true);
     
-    newSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    newSvg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    svgClone.removeAttribute('style');
+    
+    svgClone.setAttribute('width', bbox.width);
+    svgClone.setAttribute('height', bbox.height);
+    svgClone.setAttribute('viewBox', `${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}`);
+    
+    const groupInClone = svgClone.querySelector('g');
+    if(groupInClone) {
+        groupInClone.removeAttribute('transform');
+    }
 
     const style = document.createElement('style');
-    style.textContent = getAllCssRules();
-    newSvg.appendChild(style);
-
-    const groupClone = mainGroup.cloneNode(true);
-    
-    groupClone.removeAttribute('transform');
-    newSvg.appendChild(groupClone);
+    style.textContent = getMindmapCssRules();
+    svgClone.insertBefore(style, svgClone.firstChild);
 
     const serializer = new XMLSerializer();
-    let svgString = serializer.serializeToString(newSvg);
+    let svgString = serializer.serializeToString(svgClone);
 
-    svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink=');
-    svgString = svgString.replace(/NS\d+:href/g, 'xlink:href');
+    svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink=').replace(/NS\d+:href/g, 'xlink:href');
 
-    return { svgString, width: finalWidth, height: finalHeight };
+    return { svgString, width: bbox.width, height: bbox.height };
 }
 
-function downloadFile(content, fileName, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
+function downloadBlob(blob, fileName) {
     const url = URL.createObjectURL(blob);
-
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
@@ -1544,105 +1538,105 @@ function downloadFile(content, fileName, mimeType) {
 }
 
 async function exportSVG() {
-    const exportSvgBtn = document.getElementById('export-svg-btn');
-    if (exportSvgBtn.disabled) return;
+    const exportBtn = document.getElementById('export-svg-btn');
+    if (exportBtn.disabled) return;
 
     const mindmapSVG = document.querySelector('#mindmap');
-    if (!mindmapSVG || mindmapSVG.children.length === 0) {
+    if (!mindmapSVG) {
         alert(T('js_alert_no_mindmap'));
         return;
     }
     
-    const originalText = exportSvgBtn.textContent;
-    exportSvgBtn.disabled = true;
-    exportSvgBtn.textContent = T('js_exporting');
+    const originalText = exportBtn.textContent;
+    exportBtn.disabled = true;
+    exportBtn.textContent = T('js_exporting');
 
     try {
         await mm.fit();
-        const { svgString } = getSvgContentWithStyles(mindmapSVG);
-        downloadFile(svgString, `aimarkmap-${Date.now()}.svg`, 'image/svg+xml');
+        const svgData = createExportableSvg(mindmapSVG);
+
+        if (!svgData) {
+            throw new Error(T('js_alert_no_mindmap'));
+        }
+
+        const svgBlob = new Blob([svgData.svgString], { type: 'image/svg+xml;charset=utf-8' });
+        downloadBlob(svgBlob, `aimarkmap-${Date.now()}.svg`);
+
     } catch (error) {
         console.error('导出SVG失败:', error);
         alert(T('js_alert_export_error', 'SVG'));
     } finally {
-        exportSvgBtn.disabled = false;
-        exportSvgBtn.textContent = originalText;
+        exportBtn.disabled = false;
+        exportBtn.textContent = originalText;
     }
 }
 
 async function exportPNG() {
-    const exportPngBtn = document.getElementById('export-png-btn');
-    if (exportPngBtn.disabled) return;
+    const exportBtn = document.getElementById('export-png-btn');
+    if (exportBtn.disabled) return;
 
     const mindmapSVG = document.querySelector('#mindmap');
-    if (!mindmapSVG || mindmapSVG.children.length === 0) {
+    if (!mindmapSVG) {
         alert(T('js_alert_no_mindmap'));
         return;
     }
-    
-    const originalText = exportPngBtn.textContent;
-    exportPngBtn.disabled = true;
-    exportPngBtn.textContent = T('js_exporting');
+
+    const originalText = exportBtn.textContent;
+    exportBtn.disabled = true;
+    exportBtn.textContent = T('js_exporting');
 
     try {
         await mm.fit();
+        const svgData = createExportableSvg(mindmapSVG);
         
-        const margin = 20;
-        const { svgString, width, height } = getSvgContentWithStyles(mindmapSVG);
-
-        if (!svgString) {
-            alert(T('js_alert_no_mindmap'));
-            exportPngBtn.disabled = false;
-            exportPngBtn.textContent = originalText;
-            return;
+        if (!svgData) {
+            throw new Error(T('js_alert_no_mindmap'));
         }
 
+        const margin = 20;
+        const scale = 3; 
         const canvas = document.createElement('canvas');
-        const scale = 2;
-        canvas.width = (Number(width) + margin * 2) * scale;
-        canvas.height = (Number(height) + margin * 2) * scale;
+        canvas.width = (svgData.width + margin * 2) * scale;
+        canvas.height = (svgData.height + margin * 2) * scale;
         
         const ctx = canvas.getContext('2d');
-        ctx.scale(scale, scale);
+        if (!ctx) throw new Error('无法获取Canvas上下文');
         
+        ctx.imageSmoothingEnabled = false;
+
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const img = new Image();
+        const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData.svgString)));
         
-        const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+        const img = await new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = (err) => reject(new Error('Failed to load SVG as image. ' + err));
+            image.src = dataUrl;
+        });
+        
+        if(img.decode) await img.decode();
+        
+        ctx.drawImage(img, margin * scale, margin * scale, svgData.width * scale, svgData.height * scale);
 
-        img.onload = function() {
-            ctx.drawImage(img, margin, margin);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 
-            const pngUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.download = `aimarkmap-${Date.now()}.png`;
-            link.href = pngUrl;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            exportPngBtn.disabled = false;
-            exportPngBtn.textContent = originalText;
-        };
-
-        img.onerror = function(err) {
-            console.error("加载SVG Data URL到Image对象失败:", err);
-            alert(T('js_alert_export_error', 'PNG'));
-            exportPngBtn.disabled = false;
-            exportPngBtn.textContent = originalText;
-        };
-
-        img.src = dataUrl;
+        if (blob) {
+            downloadBlob(blob, `aimarkmap-${Date.now()}.png`);
+        } else {
+            throw new Error("Canvas toBlob failed.");
+        }
 
     } catch (error) {
         console.error('导出PNG时发生意外错误:', error);
         alert(T('js_alert_export_error', 'PNG'));
-        exportPngBtn.disabled = false;
-        exportPngBtn.textContent = originalText;
+    } finally {
+        exportBtn.disabled = false;
+        exportBtn.textContent = originalText;
     }
 }
+
 
 function openEditModal(originalText, lineIndex, prefix) {
     editingNodeContext = { lineIndex, prefix };
