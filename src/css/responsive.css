@@ -1,0 +1,342 @@
+/* 响应式设计系统 */
+
+/* 响应式断点 */
+@media (max-width: 1200px) {
+    .container {
+        gap: var(--space-4);
+        padding: var(--space-4);
+    }
+    
+    .editor-panel {
+        width: 350px;
+    }
+    
+    .mindmap-panel {
+        flex: 1;
+    }
+}
+
+@media (max-width: 1024px) {
+    .header h1 {
+        font-size: var(--text-xl);
+    }
+    
+    .header-right {
+        gap: var(--space-3);
+    }
+    
+    .editor-panel {
+        width: 320px;
+    }
+    
+    .text-input {
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .editor-panel {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        height: auto;
+        max-height: 50vh;
+    }
+    
+    .mindmap-panel {
+        width: 100%;
+        height: 50vh;
+        min-height: 400px;
+    }
+    
+    .panel-header {
+        padding: var(--space-3);
+    }
+    
+    .ai-config {
+        padding: var(--space-3);
+    }
+    
+    .button-row {
+        flex-wrap: wrap;
+    }
+    
+    .control-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: var(--space-3);
+        flex-direction: column;
+        gap: var(--space-3);
+        text-align: center;
+    }
+    
+    .header-right {
+        justify-content: center;
+    }
+    
+    .container {
+        padding: var(--space-3);
+        gap: var(--space-4);
+    }
+    
+    .editor-panel {
+        border-radius: var(--radius-lg);
+        max-height: 45vh;
+    }
+    
+    .mindmap-panel {
+        height: 45vh;
+        min-height: 350px;
+        border-radius: var(--radius-lg);
+    }
+    
+    .panel-header {
+        padding: var(--space-2) var(--space-3);
+    }
+    
+    .ai-config {
+        padding: var(--space-2) var(--space-3);
+    }
+    
+    .config-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-2);
+    }
+    
+    .config-label {
+        min-width: auto;
+        text-align: left;
+    }
+    
+    .button-row {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .control-btn {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .text-input {
+        min-height: 150px;
+        font-size: var(--text-base);
+    }
+    
+    .modal-content {
+        width: 95vw !important;
+        max-width: 500px;
+        margin: var(--space-4) auto;
+    }
+    
+    .results-tabs {
+        flex-wrap: wrap;
+        gap: var(--space-1);
+    }
+    
+    .result-tab-btn {
+        font-size: var(--text-xs);
+        padding: var(--space-1) var(--space-2);
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: var(--space-2);
+    }
+    
+    .header h1 {
+        font-size: var(--text-lg);
+        flex-direction: column;
+        gap: var(--space-1);
+    }
+    
+    .ai-badge {
+        font-size: var(--text-xs);
+        padding: var(--space-1) var(--space-2);
+    }
+    
+    .container {
+        padding: var(--space-2);
+        gap: var(--space-3);
+    }
+    
+    .editor-panel {
+        max-height: 40vh;
+        border-radius: var(--radius-md);
+    }
+    
+    .mindmap-panel {
+        height: 40vh;
+        min-height: 300px;
+        border-radius: var(--radius-md);
+    }
+    
+    .panel-header {
+        padding: var(--space-2);
+    }
+    
+    .panel-title {
+        font-size: var(--text-sm);
+    }
+    
+    .ai-config {
+        padding: var(--space-2);
+    }
+    
+    .config-input,
+    .model-select {
+        font-size: var(--text-xs);
+        height: 28px;
+    }
+    
+    .control-btn {
+        font-size: var(--text-xs);
+        height: 32px;
+        padding: var(--space-1) var(--space-2);
+    }
+    
+    .text-input {
+        min-height: 120px;
+        font-size: var(--text-sm);
+        padding: var(--space-2);
+    }
+    
+    .export-btn {
+        padding: var(--space-1) var(--space-2);
+        font-size: var(--text-xs);
+        min-width: auto;
+    }
+    
+    .lang-btn {
+        padding: var(--space-1) var(--space-2);
+        font-size: var(--text-xs);
+    }
+    
+    .github-icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    /* 触摸设备优化 */
+    .btn,
+    .control-btn,
+    .export-btn {
+        min-height: 44px; /* 最小触摸目标尺寸 */
+        touch-action: manipulation;
+    }
+    
+    input,
+    select,
+    textarea {
+        font-size: 16px; /* 防止iOS缩放 */
+    }
+    
+    /* 防止横向滚动 */
+    body {
+        overflow-x: hidden;
+    }
+    
+    .modal-overlay {
+        padding: var(--space-2);
+    }
+    
+    .modal-content {
+        width: 100vw !important;
+        margin: 0;
+        border-radius: 0;
+        height: 100vh;
+        max-height: 100vh;
+    }
+    
+    .info-modal-content {
+        padding: var(--space-3);
+        font-size: var(--text-sm);
+    }
+}
+
+@media (max-width: 320px) {
+    .header-right {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-2);
+    }
+    
+    .lang-switcher {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .control-btn {
+        font-size: var(--text-xs);
+        padding: var(--space-1);
+    }
+    
+    .text-input {
+        min-height: 100px;
+    }
+}
+
+/* 横屏设备优化 */
+@media (max-height: 500px) and (orientation: landscape) {
+    .container {
+        flex-direction: row;
+        height: 100vh;
+    }
+    
+    .editor-panel {
+        width: 40%;
+        max-height: none;
+        height: 100%;
+    }
+    
+    .mindmap-panel {
+        width: 60%;
+        height: 100%;
+        min-height: auto;
+    }
+    
+    .text-input {
+        min-height: 120px;
+    }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+    }
+    
+    .input {
+        border-width: 2px;
+    }
+    
+    .card {
+        border: 1px solid var(--color-gray-300);
+    }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
