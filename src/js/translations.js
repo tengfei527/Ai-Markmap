@@ -109,6 +109,13 @@ const translations = {
         'js_alert_query_success': (n) => `成功获取到 ${n} 个可用模型！`,
         'js_alert_no_mindmap': '找不到思维导图，无法导出。',
         'js_alert_export_error': (type) => `导出${type}图片时发生错误，请稍后重试。`,
+        'error_network': '网络连接异常，请检查网络设置',
+        'error_api': 'API服务暂时不可用，请稍后重试',
+        'error_export': '导出过程中出现错误',
+        'error_general': '操作失败，请稍后重试',
+        'toast_loading': '处理中...',
+        'toast_success': '操作成功',
+        'toast_warning': '操作警告',
         
         'defaultMarkdown': `# 🤖 AI思维导图生成 - AiMarkmap
 
@@ -299,6 +306,13 @@ const translations = {
         'js_alert_query_success': (n) => `Successfully fetched ${n} available models!`,
         'js_alert_no_mindmap': 'Could not find the mind map to export.',
         'js_alert_export_error': (type) => `An error occurred while exporting the ${type} image. Please try again later.`,
+        'error_network': 'Network connection error, please check your settings',
+        'error_api': 'API service temporarily unavailable, please try again later',
+        'error_export': 'Error occurred during export',
+        'error_general': 'Operation failed, please try again later',
+        'toast_loading': 'Processing...',
+        'toast_success': 'Operation successful',
+        'toast_warning': 'Operation warning',
         
         'defaultMarkdown': `# 🤖 AI Mind Map Generation - AiMarkmap
 
