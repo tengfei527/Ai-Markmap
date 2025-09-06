@@ -22,6 +22,8 @@ let topicInput;
 let contentDisplay;
 let showOriginalBtn;
 let showMarkdownBtn;
+let themeSelect;
+let modeToggle;
 
 /**
  * 切换编辑器面板折叠状态
@@ -39,6 +41,35 @@ function toggleEditorPanel() {
             mm.fit();
         }, 100);
     }
+}
+
+/**
+ * 处理主题切换
+ */
+function handleThemeChange() {
+    const theme = themeSelect.value;
+    applyTheme(theme);
+    localStorage.setItem('ai-mindmap-theme', theme);
+}
+
+/**
+ * 应用主题样式
+ */
+function applyTheme(theme) {
+    // 移除所有主题类
+    document.body.classList.remove('theme-default', 'theme-dark', 'theme-blue', 'theme-green', 'theme-purple');
+    
+    // 添加当前主题类
+    document.body.classList.add(`theme-${theme}`);
+}
+
+/**
+ * 切换日/夜模式
+ */
+function toggleDayNightMode() {
+    const isNightMode = document.body.classList.toggle('night-mode');
+    const mode = isNightMode ? 'night' : 'day';
+    localStorage.setItem('ai-mindmap-mode', mode);
 }
 const settingsModal = document.getElementById('settings-modal');
 const infoModal = document.getElementById('info-modal');
@@ -98,6 +129,8 @@ async function init() {
         contentDisplay = document.getElementById('content-display');
         showOriginalBtn = document.getElementById('show-original-btn');
         showMarkdownBtn = document.getElementById('show-markdown-btn');
+        themeSelect = document.getElementById('theme-select');
+        modeToggle = document.getElementById('mode-toggle');
         
         await waitForLibraries();
         const { Transformer, Markmap } = window.markmap;
@@ -181,6 +214,12 @@ async function init() {
         // 编辑器面板折叠功能
         document.getElementById('fold-btn').addEventListener('click', toggleEditorPanel);
 
+        // 主题切换功能
+        themeSelect.addEventListener('change', handleThemeChange);
+
+        // 日/夜模式切换功能
+        modeToggle.addEventListener('click', toggleDayNightMode);
+
         // 加载配置和初始化
         loadConfig();
 
@@ -188,6 +227,19 @@ async function init() {
         const savedFoldState = localStorage.getItem('editorPanelFolded');
         if (savedFoldState === 'true') {
             editorPanel.classList.add('folded');
+        }
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('ai-mindmap-theme') || 'default';
+        themeSelect.value = savedTheme;
+        applyTheme(savedTheme);
+
+        // 加载日/夜模式设置
+        const savedMode = localStorage.getItem('ai-mindmap-mode');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedMode === 'night' || (!savedMode && systemPrefersDark)) {
+            document.body.classList.add('night-mode');
         }
 
         const savedLang = localStorage.getItem('ai-mindmap-language');

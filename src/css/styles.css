@@ -91,6 +91,81 @@ body {
     border-color: white;
 }
 
+.night-mode .lang-btn.active {
+    background: var(--bg-secondary);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.theme-selector {
+    display: flex;
+    align-items: center;
+}
+
+.theme-select {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    height: 32px;
+    min-width: 100px;
+}
+
+.theme-select:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.theme-select option {
+    background: #2d3748;
+    color: white;
+}
+
+.mode-toggle-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.mode-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.mode-icon {
+    transition: all 0.3s ease;
+}
+
+/* 日夜模式图标样式 */
+.sun-icon {
+    display: block;
+}
+
+.moon-icon {
+    display: none;
+}
+
+.night-mode .sun-icon {
+    display: none;
+}
+
+.night-mode .moon-icon {
+    display: block;
+}
+
 .container {
     display: flex;
     height: calc(100vh - 68px);
@@ -278,6 +353,13 @@ body {
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
 }
 
+.night-mode .control-btn.view-btn.active {
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+    color: white;
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 .control-btn.markdown-btn {
     background: linear-gradient(135deg, #e8f5e8, #f0f8ff);
     color: #2e7d32;
@@ -295,6 +377,13 @@ body {
     color: white;
     border: 1px solid #4caf50;
     box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+}
+
+.night-mode .control-btn.markdown-btn.active {
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+    color: white;
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .control-btn.clear-btn {
@@ -410,6 +499,11 @@ body {
     background: rgba(255, 255, 255, 0.4);
     font-weight: 700;
     border-color: white;
+}
+
+.night-mode .result-tab-btn.active {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: var(--accent-color);
 }
 
 .mindmap-container {
@@ -574,6 +668,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.night-mode .fold-btn {
+    color: #90caf9;
 }
 
 .fold-btn:hover {
@@ -820,4 +917,345 @@ body {
     font-family: monospace;
     color: #4c63d2;
     font-weight: 600;
+}
+
+/* ===== 主题系统优化 ===== */
+
+/* 基础主题变量 */
+:root {
+  --transition-duration: 0.4s;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 默认主题 - 现代紫罗兰 */
+.theme-default {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --header-bg: rgba(255, 255, 255, 0.15);
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --border-color: #e2e8f0;
+  --accent-color: #667eea;
+  --accent-hover: #5a67d8;
+}
+
+.theme-default body {
+  background: var(--primary-gradient);
+  transition: background var(--transition-duration) var(--transition-timing);
+}
+
+.theme-default .header {
+  background: var(--header-bg);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-default .mindmap-header {
+  background: var(--primary-gradient);
+}
+
+.theme-default .editor-panel {
+  background: rgba(255, 255, 255, 0.98);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.theme-default .control-btn.ai-btn {
+  background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+  color: white;
+}
+
+/* 深色主题 - 专业深蓝 */
+.theme-dark {
+  --primary-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  --header-bg: rgba(45, 55, 72, 0.15); 
+  --text-primary: #e2e8f0;
+  --text-secondary: #a0aec0;
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --border-color: #4a5568;
+  --accent-color: #4a5568;
+  --accent-hover: #718096;
+}
+
+/* 蓝色主题 - 专业海洋蓝 */
+.theme-blue {
+  --primary-gradient: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+  --header-bg: rgba(49, 130, 206, 0.1);
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --border-color: #e2e8f0;
+  --accent-color: #3182ce;
+  --accent-hover: #2c5282;
+}
+
+/* 绿色主题 - 自然森林绿 */
+.theme-green {
+  --primary-gradient: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+  --header-bg: rgba(56, 161, 105, 0.12); 
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --border-color: #e2e8f0;
+  --accent-color: #38a169;
+  --accent-hover: #2f855a;
+}
+
+/* 紫色主题 - 优雅紫晶 */
+.theme-purple {
+  --primary-gradient: linear-gradient(135deg, #805ad5 0%, #6b46c1 100%);
+  --header-bg: rgba(255, 255, 255, 0.2);
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --border-color: #e2e8f0;
+  --accent-color: #805ad5;
+  --accent-hover: #6b46c1;
+}
+
+/* 通用主题样式 */
+[class^="theme-"] body {
+  background: var(--primary-gradient);
+  transition: background var(--transition-duration) var(--transition-timing);
+}
+
+[class^="theme-"] .header {
+  background: var(--header-bg);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+[class^="theme-"] .mindmap-header {
+  background: var(--primary-gradient);
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+[class^="theme-"] .mindmap-container {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+[class^="theme-"] .editor-panel {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+[class^="theme-"] .text-input,
+[class^="theme-"] .content-display {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+[class^="theme-"] .config-label {
+  color: var(--text-secondary);
+}
+
+[class^="theme-"] .config-input,
+[class^="theme-"] .model-select {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+[class^="theme-"] .control-btn.ai-btn {
+  background: linear-gradient(45deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+[class^="theme-"] .control-btn.ai-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+[class^="theme-"] .control-btn.view-btn,
+[class^="theme-"] .control-btn.markdown-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+[class^="theme-"] .control-btn.clear-btn {
+  background: #fed7d7;
+  color: #c53030;
+  border: 1px solid #feb2b2;
+}
+
+[class^="theme-"] .github-link:hover,
+[class^="theme-"] .lang-btn:hover,
+[class^="theme-"] .theme-select:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* 全局过渡效果 */
+body {
+  transition: background-color var(--transition-duration) var(--transition-timing),
+             color var(--transition-duration) var(--transition-timing);
+}
+
+.header,
+.mindmap-header,
+.editor-panel,
+.text-input,
+.content-display,
+.config-input,
+.model-select,
+.control-btn {
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+/* ===== 夜间模式优化 ===== */
+
+/* 夜间模式变量覆盖 */
+.night-mode {
+  --text-primary: #e2e8f0;
+  --text-secondary: #a0aec0;
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --border-color: #4a5568;
+  --header-bg: rgba(0, 0, 0, 0.4);
+}
+
+/* 主题特定的夜间模式调整 */
+.night-mode.theme-default {
+  --primary-gradient: linear-gradient(135deg, #4c63d2 0%, #5a369a 100%);
+  --accent-color: #667eea;
+  --accent-hover: #5a67d8;
+}
+
+.night-mode.theme-dark {
+  --primary-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  --accent-color: #4a5568;
+  --accent-hover: #718096;
+}
+
+.night-mode.theme-blue {
+  --primary-gradient: linear-gradient(135deg, #2c5282 0%, #1e4e8c 100%);
+  --accent-color: #3182ce;
+  --accent-hover: #2c5282;
+}
+
+.night-mode.theme-green {
+  --primary-gradient: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+  --accent-color: #38a169;
+  --accent-hover: #2f855a;
+}
+
+.night-mode.theme-purple {
+  --primary-gradient: linear-gradient(135deg, #553c9a 0%, #44337a 100%);
+  --accent-color: #805ad5;
+  --accent-hover: #6b46c1;
+}
+
+/* 夜间模式通用组件样式 */
+.night-mode .editor-panel {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.night-mode .panel-header {
+  /* background: rgba(74, 85, 104, 0.3); */
+  background: var(--primary-gradient);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.night-mode .panel-section {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.night-mode .control-btn.view-btn,
+.night-mode .control-btn.markdown-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.night-mode .control-btn.clear-btn {
+  background: #742a2a;
+  color: #fed7d7;
+  border: 1px solid #c53030;
+}
+
+.night-mode .github-icon,
+.night-mode .mode-icon {
+  filter: brightness(0.9);
+}
+
+/* 可访问性优化 */
+.night-mode .text-input:focus,
+.night-mode .content-display:focus,
+.night-mode .config-input:focus,
+.night-mode .model-select:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* 系统主题自动检测增强 */
+@media (prefers-color-scheme: dark) {
+  body:not(.night-mode):not([class*="theme-"]) {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  }
+  
+  body:not(.night-mode):not([class*="theme-"]) .header {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-duration: 0.01ms;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .night-mode {
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --border-color: #718096;
+  }
+  
+  .night-mode .control-btn {
+    border-width: 2px;
+  }
+  
+  .night-mode .text-input,
+  .night-mode .content-display,
+  .night-mode .config-input {
+    border-width: 2px;
+  }
+}
+
+/* 移动端夜间模式优化 */
+@media (max-width: 768px) {
+  .night-mode .editor-panel {
+    border: 1px solid var(--border-color);
+  }
+  
+  .night-mode .control-btn {
+    min-height: 48px;
+    font-weight: 600;
+  }
 }
