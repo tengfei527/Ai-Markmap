@@ -97,6 +97,7 @@ body {
     gap: 1rem;
     padding: 1rem;
     flex-wrap: nowrap;
+    min-height: 500px; /* 最小高度保证移动端显示 */
 }
 
 .editor-panel {
@@ -109,7 +110,7 @@ body {
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .panel-header {
@@ -559,6 +560,48 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
+}
+
+.fold-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 4px;
+    color: #4c63d2;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fold-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.editor-panel.folded {
+    width: 60px !important;
+    overflow: hidden;
+}
+
+.editor-panel.folded .panel-section,
+.editor-panel.folded .input-section {
+    display: none !important;
+}
+
+.editor-panel.folded .panel-header {
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.editor-panel.folded .control-btn {
+    display: none !important;
+}
+
+.editor-panel.folded .fold-btn {
+    transform: rotate(90deg);
 }
 
 #settings-btn, #prompt-settings-btn {

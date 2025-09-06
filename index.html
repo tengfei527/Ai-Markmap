@@ -36,6 +36,11 @@
     <div class="container">
         <div class="editor-panel">
             <div class="panel-header">
+                <button class="fold-btn" id="fold-btn" title="折叠/展开面板">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
                 <button class="control-btn" id="prompt-settings-btn" data-t="promptSettingsBtn"></button>
                 <button class="control-btn" id="settings-btn" onclick="openSettingsModal()" data-t="apiSettingsBtn"></button>
             </div>
@@ -82,7 +87,7 @@
             <div class="mindmap-header">
                 <div class="panel-title" data-t="mindmapPreviewTitle"></div>
                 <div id="results-tabs" class="results-tabs"></div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="export-buttons">
                     <button id="fullscreen-btn" class="export-btn" onclick="toggleFullScreen()"></button>
                     <button id="export-svg-btn" class="export-btn" onclick="exportSVG()" data-t="exportSvgBtn" disabled></button>
                     <button id="export-png-btn" class="export-btn" onclick="exportPNG()" data-t="exportPngBtn" disabled></button>

@@ -17,10 +17,29 @@ let editingNodeContext = null;    // 正在编辑的节点上下文
 let currentLanguage = 'zh';       // 当前语言
 
 // DOM元素引用
-const topicInput = document.getElementById('topic-input');
-const contentDisplay = document.getElementById('content-display');
-const showOriginalBtn = document.getElementById('show-original-btn');
-const showMarkdownBtn = document.getElementById('show-markdown-btn');
+let editorPanel;
+let topicInput;
+let contentDisplay;
+let showOriginalBtn;
+let showMarkdownBtn;
+
+/**
+ * 切换编辑器面板折叠状态
+ */
+function toggleEditorPanel() {
+    editorPanel.classList.toggle('folded');
+    
+    // 保存折叠状态到本地存储
+    const isFolded = editorPanel.classList.contains('folded');
+    localStorage.setItem('editorPanelFolded', isFolded);
+    
+    // 调整思维导图容器大小
+    if (mm) {
+        setTimeout(() => {
+            mm.fit();
+        }, 100);
+    }
+}
 const settingsModal = document.getElementById('settings-modal');
 const infoModal = document.getElementById('info-modal');
 const editNodeModal = document.getElementById('edit-node-modal');
@@ -73,6 +92,13 @@ function waitForLibraries() {
  */
 async function init() {
     try {
+        // 初始化DOM元素引用
+        editorPanel = document.querySelector('.editor-panel');
+        topicInput = document.getElementById('topic-input');
+        contentDisplay = document.getElementById('content-display');
+        showOriginalBtn = document.getElementById('show-original-btn');
+        showMarkdownBtn = document.getElementById('show-markdown-btn');
+        
         await waitForLibraries();
         const { Transformer, Markmap } = window.markmap;
         transformer = new Transformer();
@@ -152,8 +178,17 @@ async function init() {
             this.textContent = isPassword ? '🙈' : '👁️';
         });
 
+        // 编辑器面板折叠功能
+        document.getElementById('fold-btn').addEventListener('click', toggleEditorPanel);
+
         // 加载配置和初始化
         loadConfig();
+
+        // 加载编辑器面板折叠状态
+        const savedFoldState = localStorage.getItem('editorPanelFolded');
+        if (savedFoldState === 'true') {
+            editorPanel.classList.add('folded');
+        }
 
         const savedLang = localStorage.getItem('ai-mindmap-language');
         const browserLang = navigator.language.split('-')[0];
