@@ -50,6 +50,13 @@
         max-height: 45vh;
         /* min-height: 200px; */
     }
+    /* 移动端折叠状态 */
+    .editor-panel.folded {
+        width: 100% !important;
+        height: auto;
+        min-height: 60px;
+        max-height: 60px;
+    }
     
     .mindmap-panel {
         width: 100%;
