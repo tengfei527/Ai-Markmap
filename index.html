@@ -2,7 +2,18 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <title>AI思维导图生成 - AiMarkmap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI思维导图生成工具 - 使用人工智能快速创建专业的思维导图、概念图和知识图谱。支持多种AI模型，一键导出SVG/PNG格式。">
+    <meta name="keywords" content="AI思维导图,思维导图生成器,AI工具,知识图谱,概念图,markdown转思维导图">
+    <meta name="author" content="AiMarkmap">
+    <meta property="og:title" content="AI思维导图生成 - AiMarkmap">
+    <meta property="og:description" content="使用人工智能快速创建专业的思维导图、概念图和知识图谱">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aimarkmap.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI思维导图生成 - AiMarkmap">
+    <meta name="twitter:description" content="使用人工智能快速创建专业的思维导图、概念图和知识图谱">
+    <title>AI思维导图生成 - AiMarkmap | 智能思维导图制作工具</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23667eea'/%3E%3Cg stroke='white' stroke-width='6' stroke-linecap='round'%3E%3Cline x1='50' y1='50' x2='80' y2='25'/%3E%3Cline x1='50' y1='50' x2='25' y2='40'/%3E%3Cline x1='50' y1='50' x2='60' y2='80'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='12' fill='white'/%3E%3Ccircle cx='80' cy='25' r='8' fill='white'/%3E%3Ccircle cx='25' cy='40' r='8' fill='white'/%3E%3Ccircle cx='60' cy='80' r='8' fill='white'/%3E%3Cpath d='M50 44L52 48 L56 50 L52 52 L50 56 L48 52 L44 50 L48 48 Z' fill='%23764ba2'/%3E%3C/svg%3E">
     <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js"></script>
     <script src="https://unpkg.com/markmap-lib@0.15.3/dist/browser/index.js"></script>
@@ -17,7 +28,7 @@
     <div class="header">
         <h1>AiMarkmap <span class="ai-badge">AI Powered</span></h1>
         <div class="header-right">
-            <button id="info-btn" class="github-link" style="background:none; border:none; cursor:pointer; padding:0; color:white;" data-t-title="helpBtnTitle">
+            <button id="info-btn" class="github-link" style="background:none; border:none; cursor:pointer; padding:0; color:white;" data-t-title="helpBtnTitle" aria-label="帮助信息">
                 <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                     <path d="M0 0h24v24H0z" fill="none"></path>
                     <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"></path>
@@ -35,7 +46,7 @@
                     <option value="purple">紫色主题</option>
                 </select>
             </div>
-            <button id="mode-toggle" class="mode-toggle-btn" title="切换日/夜模式">
+            <button id="mode-toggle" class="mode-toggle-btn" title="切换日/夜模式" aria-label="切换日夜间模式">
                 <svg class="mode-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-12a.75.75 0 0 0 .75-.75V3a.75.75 0 0 0-1.5 0v1.25A.75.75 0 0 0 12 5zm0 16a.75.75 0 0 0 .75-.75V21a.75.75 0 0 0-1.5 0v-1.25A.75.75 0 0 0 12 21zM4.22 6.22a.75.75 0 0 0 1.06 0l.97-.97a.75.75 0 0 0-1.06-1.06l-.97.97a.75.75 0 0 0 0 1.06zm14.5 14.5a.75.75 0 0 0 1.06 0l.97-.97a.75.75 0 1 0-1.06-1.06l-.97.97a.75.75 0 0 0 0 1.06zM3 12a.75.75 0 0 0-.75-.75H1a.75.75 0 0 0 0 1.5h1.25A.75.75 0 0 0 3 12zm20 0a.75.75 0 0 0-.75-.75H21a.75.75 0 0 0 0 1.5h1.25A.75.75 0 0 0 23 12zM6.22 19.78a.75.75 0 0 0 0-1.06l-.97-.97a.75.75 0 0 0-1.06 1.06l.97.97a.75.75 0 0 0 1.06 0zm14.5-14.5a.75.75 0 0 0 0-1.06l-.97-.97a.75.75 0 1 0-1.06 1.06l.97.97a.75.75 0 0 0 1.06 0z"/>
                 </svg>
@@ -44,8 +55,8 @@
                 </svg>
             </button>
             <div id="lang-switcher">
-                <button data-lang="zh" class="lang-btn">中文</button>
-                <button data-lang="en" class="lang-btn">EN</button>
+                <button data-lang="zh" class="lang-btn" aria-label="切换到中文">中文</button>
+                <button data-lang="en" class="lang-btn" aria-label="Switch to English">EN</button>
             </div>
         </div>
     </div>
@@ -53,7 +64,7 @@
     <div class="container">
         <div class="editor-panel">
             <div class="panel-header">
-                <button class="fold-btn" id="fold-btn" title="折叠/展开面板">
+                <button class="fold-btn" id="fold-btn" title="折叠/展开面板" aria-label="折叠展开编辑面板">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
                     </svg>
@@ -194,6 +205,22 @@
         </div>
     </div>
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "AiMarkmap - AI思维导图生成工具",
+      "description": "使用人工智能快速创建专业的思维导图、概念图和知识图谱。支持多种AI模型，一键导出SVG/PNG格式。",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web Browser",
+      "permissions": "browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
     <script src="src/js/translations.js"></script>
     <script src="src/js/utils.js"></script>
     <script src="src/js/error-handler.js"></script>

@@ -47,7 +47,7 @@
         /* max-width: 600px; */
         margin: 0 auto;
         height: auto;
-        max-height: 45vh;
+        /* max-height: 45vh; */
         /* min-height: 200px; */
     }
     /* 移动端折叠状态 */
@@ -55,12 +55,12 @@
         width: 100% !important;
         height: auto;
         min-height: 60px;
-        max-height: 60px;
+        /* max-height: 60px; */
     }
     
     .mindmap-panel {
         width: 100%;
-        height: 55vh;
+        /* height: 55vh; */
         min-height: 350px;
         flex: none;
     }
@@ -115,7 +115,7 @@
         max-width: none;
         height: auto;
         min-height: 200px;
-        max-height: 45vh;
+        /* max-height: 45vh; */
         border-radius: var(--radius-lg);
         order: 1;
         flex: none;
@@ -144,6 +144,7 @@
     .mindmap-container {
         flex: 1;
         min-height: 250px;
+        height: 100%;
         position: relative;
     }
     
@@ -175,13 +176,13 @@
     }
     
     .button-row {
-        flex-direction: column;
+        flex-direction: wrap;
         gap: var(--space-2);
     }
     
     .control-btn {
         min-width: auto;
-        width: 100%;
+        width: 40%;
         min-height: 44px;
         font-size: var(--text-sm);
     }
@@ -266,7 +267,7 @@
     
     /* 小屏移动端优化 */
     .editor-panel {
-        max-height: 42vh;
+        /* max-height: 42vh; */
         min-height: 180px;
         border-radius: var(--radius-md);
         margin-bottom: var(--space-1);
@@ -279,6 +280,7 @@
     
     .mindmap-container {
         min-height: 220px;
+        height: 100%;
     }
     
     .panel-header {

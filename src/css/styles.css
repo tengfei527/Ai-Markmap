@@ -185,7 +185,7 @@ body {
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
-    /* height: 100%; */
+    height: 100%;
 }
 
 .panel-header {
