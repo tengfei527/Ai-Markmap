@@ -57,10 +57,19 @@ function handleThemeChange() {
  */
 function applyTheme(theme) {
     // 移除所有主题类
-    document.body.classList.remove('theme-default', 'theme-dark', 'theme-blue', 'theme-green', 'theme-purple');
+    document.body.classList.remove('theme-default', 'theme-dark', 'theme-blue', 'theme-green', 'theme-purple','night-mode');
     
-    // 添加当前主题类
-    document.body.classList.add(`theme-${theme}`);
+
+    // 加载日/夜模式设置
+    const savedMode = localStorage.getItem('ai-mindmap-mode');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+    if (savedMode === 'night' || (!savedMode && systemPrefersDark)) {
+        document.body.classList.add(`theme-${theme}`, `night-mode`);
+    }else{
+        // 添加当前主题类
+        document.body.classList.add(`theme-${theme}`);
+    }
 }
 
 /**
